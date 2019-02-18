@@ -19,8 +19,34 @@ parser.add_argument('-o', '--opengap', help='open gap', required=False, default=
 parser.add_argument('-e', '--extgap', help='extension gap', required=False, default=-1)
 args = parser.parse_args()
 
+inputFile = args.input
+scoreFile = args.score
+openGap = args.opengap
+extGap = args.extgap
+
 ### Implement Smith-Waterman Algorithm
 def runSW(inputFile, scoreFile, openGap, extGap):
+    seqs = []
+    with open(inputFile) as f:
+        seqs = f.readlines()
+    seqs = seqs + ['']
+    seqs = [line.strip() for line in seqs if line.strip()]
+
+    scoreRows = []
+    scoreCols = []
+    scoreMatrix = []
+    with open(scoreFile) as f:
+        lines = f.readlines()
+        scoreCols = lines[0].strip().split()
+        for line in lines[1:]:
+            line = line.strip().split()
+            if line:
+                scoreRows.append(line[0])
+                row = [float(i) for i in line[1:]]
+                scoreMatrix.append(row)
+    scoreMatrix = np.matrix(scoreMatrix)
+
+
 ### Print input and score file names.
 print ("input file : %s" % inputFile)
 print ("score file : %s" % scoreFile)
