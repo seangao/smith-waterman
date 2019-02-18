@@ -106,7 +106,6 @@ def runSW(inputFile, scoreFile, openGap, extGap):
     print bnew
 
 
-
 ### Print input and score file names.
 print ("input file : %s" % inputFile)
 print ("score file : %s" % scoreFile)
