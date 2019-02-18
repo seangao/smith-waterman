@@ -53,31 +53,37 @@ def runSW(inputFile, scoreFile, openGap, extGap):
     n = len(a)
     m = len(b)
     H = np.zeros((n + 1, m + 1))
+    state = np.zeros((n + 1, m + 1))
 
     W = np.arange(openGap, openGap + extGap * max(n, m), extGap)
 
     for i in range(1, n + 1):
         for j in range(1, m + 1):
-            H[i][j] = max(H[i - 1][j - 1] + S[SRows[a[i - 1]], SCols[b[j - 1]]],
-                max([H[i - k][j] + W[k - 1] for k in range(1, i + 1)]),
-                max([H[i][j - l] + W[l - 1] for l in range(1, j + 1)]),
+            match = H[i - 1][j - 1] + S[SRows[a[i - 1]], SCols[b[j - 1]]]
+            insertion = max([H[i - k][j] + W[k - 1] for k in range(1, i + 1)])
+            deletion = max([H[i][j - l] + W[l - 1] for l in range(1, j + 1)])
+            H[i][j] = max(match,
+                insertion,
+                deletion,
                 0)
+            if H[i][j] == match:
+                state[i][j] = 1
+            elif H[i][j] == insertion:
+                state[i][j] = 2
+            else:
+                state[i][j] = 3
 
     ind = np.unravel_index(np.argmax(H, axis=None), H.shape)
     np.set_printoptions(threshold=np.nan)
-    print H
     print H[ind]
     anew = a[ind[0] - 1]
     bnew = b[ind[1] - 1]
     while H[ind] != 0:
-        next = max(H[ind[0] - 1, ind[1] - 1],
-            H[ind[0] - 1, ind[1]],
-            H[ind[0], ind[1] - 1])
-        if next == H[ind[0] - 1, ind[1] - 1]:
+        if state[ind] == 1:
             ind = ind[0] - 1, ind[1] - 1
             anew += a[ind[0] - 1]
             bnew += b[ind[1] - 1]
-        elif next == H[ind[0] - 1, ind[1]]:
+        elif state[ind] == 2:
             ind = ind[0] - 1, ind[1]
             anew += a[ind[0] - 1]
             bnew = bnew[:-1] + '-' + bnew[-1]
@@ -86,8 +92,18 @@ def runSW(inputFile, scoreFile, openGap, extGap):
             anew = anew[:-1] + '-' + anew[-1]
             bnew += b[ind[1] - 1]
 
-    print anew[::-1]
-    print bnew[::-1]
+    bnew = bnew[::-1]
+    anew = anew[::-1]
+    align = ''
+    for i in range(len(anew)):
+        if anew[i] == bnew[i]:
+            align += '|'
+        else:
+            align += ' '
+
+    print anew
+    print align
+    print bnew
 
 
 
