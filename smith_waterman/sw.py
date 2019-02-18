@@ -70,7 +70,7 @@ def runSW(inputFile, scoreFile, openGap, extGap):
                 state[i][j] = 1
             elif H[i][j] == insertion:
                 state[i][j] = 2
-            else:
+            elif H[i][j] == deletion:
                 state[i][j] = 3
 
     ind = np.unravel_index(np.argmax(H, axis=None), H.shape)
@@ -78,7 +78,7 @@ def runSW(inputFile, scoreFile, openGap, extGap):
     print H[ind]
     anew = a[ind[0] - 1]
     bnew = b[ind[1] - 1]
-    while H[ind] != 0:
+    while H[ind] != 0 and ind[0] > 1 and ind[1] > 1:
         if state[ind] == 1:
             ind = ind[0] - 1, ind[1] - 1
             anew += a[ind[0] - 1]
@@ -87,10 +87,12 @@ def runSW(inputFile, scoreFile, openGap, extGap):
             ind = ind[0] - 1, ind[1]
             anew += a[ind[0] - 1]
             bnew = bnew[:-1] + '-' + bnew[-1]
-        else:
+        elif state[ind] == 3:
             ind = ind[0], ind[1] - 1
             anew = anew[:-1] + '-' + anew[-1]
             bnew += b[ind[1] - 1]
+        else:
+            break
 
     bnew = bnew[::-1]
     anew = anew[::-1]
