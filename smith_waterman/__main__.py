@@ -122,8 +122,7 @@ def runSW(inputFile, scoreFile, openGap=-2, extGap=-1):
     print (align)
     print (bnew)
 
-if __name__ == '__main__':
-
+def main():
     ### Read input file and score file.
     parser = argparse.ArgumentParser(description='Smith-Waterman Algorithm')
     parser.add_argument('-i', '--input', help='input file', required=True)
@@ -145,3 +144,6 @@ if __name__ == '__main__':
 
     ### Run Smith-Waterman Algorithm
     runSW(args.input, args.score, args.opengap, args.extgap)
+
+if __name__ == '__main__':
+    main()

@@ -8,4 +8,9 @@ setup(name='Smith-Waterman',
       author='Sean Gao',
       author_email='sean.gao@yale.edu',
       packages=['smith_waterman'],
+      entry_points={
+        'console_scripts': [
+            'smith_waterman = smith_waterman.__main__:main'
+        ]
+      }
      )
