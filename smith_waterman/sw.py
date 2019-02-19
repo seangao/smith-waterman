@@ -26,12 +26,14 @@ extGap = args.extgap
 
 ### Implement Smith-Waterman Algorithm
 def runSW(inputFile, scoreFile, openGap, extGap):
+    ### Parse sequences
     seqs = []
     with open(inputFile) as f:
         seqs = f.readlines()
     seqs = seqs + ['']
-    seqs = [line.strip() for line in seqs if line.strip()]
+    seqs = [line.strip().upper() for line in seqs if line.strip()]
 
+    ### Convert score file into matrix
     scoreRows = []
     scoreCols = []
     S = []
@@ -48,6 +50,7 @@ def runSW(inputFile, scoreFile, openGap, extGap):
     SCols = {k: v for v, k in enumerate(scoreCols)}
     S = np.matrix(S)
 
+    ### Align matrix setup
     a = seqs[0]
     b = seqs[1]
     n = len(a)
@@ -55,8 +58,10 @@ def runSW(inputFile, scoreFile, openGap, extGap):
     H = np.zeros((n + 1, m + 1))
     state = np.zeros((n + 1, m + 1))
 
+    ### Create gap penalty vector
     W = np.arange(openGap, openGap + extGap * max(n, m), extGap)
 
+    ### Create align matrix
     for i in range(1, n + 1):
         for j in range(1, m + 1):
             match = H[i - 1][j - 1] + S[SRows[a[i - 1]], SCols[b[j - 1]]]
@@ -73,9 +78,9 @@ def runSW(inputFile, scoreFile, openGap, extGap):
             elif H[i][j] == deletion:
                 state[i][j] = 3
 
+    ### Traceback
     ind = np.unravel_index(np.argmax(H, axis=None), H.shape)
-    np.set_printoptions(threshold=np.nan)
-    print H[ind]
+    score = H[ind]
     anew = a[ind[0] - 1]
     bnew = b[ind[1] - 1]
     while H[ind] != 0 and ind[0] > 1 and ind[1] > 1:
@@ -103,9 +108,32 @@ def runSW(inputFile, scoreFile, openGap, extGap):
         else:
             align += ' '
 
-    print anew
-    print align
-    print bnew
+    print (" ---------------------------------------------------")
+    print ("|       Sequences                                   |")
+    print (" ---------------------------------------------------")
+    print ("")
+    print ("sequence1\t%s" % a)
+    print ("sequence2\t%s" % b)
+    print ("")
+
+    print (" ---------------------------------------------------")
+    print ("|       Score Matrix                                |")
+    print (" ---------------------------------------------------")
+    print ("")
+    print ('\t'.join(['', ''] + list(b)))
+    a = [''] + list(a)
+    for i in range(H.shape[0]):
+        print ('\t'.join([a[i]] + [str(k) for k in H[i].tolist()]))
+    print ("")
+
+    print (" ---------------------------------------------------")
+    print ("|       Best Local Alignment                        |")
+    print (" ---------------------------------------------------")
+    print ("")
+    print ("Alignment Score:\t\t%s" % score)
+    print (anew)
+    print (align)
+    print (bnew)
 
 
 ### Print input and score file names.
