@@ -8,3 +8,5 @@
 
 ## Example
 `smith_waterman -i input.txt -s blosum62.txt`
+
+Example input/ouput located in `examples/` folder.
