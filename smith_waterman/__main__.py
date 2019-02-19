@@ -4,8 +4,8 @@ __email__ = "sean.gao@yale.edu"
 __copyright__ = "Copyright 2019"
 __license__ = "GPL"
 __version__ = "1.0.0"
-### Usage:    python sw.py -i <input file> -s <score file>
-### Example:  python sw.py -i input.txt -s blosum62.txt
+### Usage:    smith_waterman -i <input file> -s <score file>
+### Example:  smith_waterman -i input.txt -s blosum62.txt
 ### Note:     Smith-Waterman Algorithm
 
 import argparse
