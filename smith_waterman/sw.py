@@ -11,21 +11,8 @@ __version__ = "1.0.0"
 import argparse
 import numpy as np
 
-### Read input file and score file.
-parser = argparse.ArgumentParser(description='Smith-Waterman Algorithm')
-parser.add_argument('-i', '--input', help='input file', required=True)
-parser.add_argument('-s', '--score', help='score file', required=True)
-parser.add_argument('-o', '--opengap', help='open gap', required=False, default=-2)
-parser.add_argument('-e', '--extgap', help='extension gap', required=False, default=-1)
-args = parser.parse_args()
-
-inputFile = args.input
-scoreFile = args.score
-openGap = args.opengap
-extGap = args.extgap
-
 ### Implement Smith-Waterman Algorithm
-def runSW(inputFile, scoreFile, openGap, extGap):
+def runSW(inputFile, scoreFile, openGap=-2, extGap=-1):
     ### Parse sequences
     seqs = []
     with open(inputFile) as f:
@@ -135,11 +122,26 @@ def runSW(inputFile, scoreFile, openGap, extGap):
     print (align)
     print (bnew)
 
+if __name__ == '__main__':
 
-### Print input and score file names.
-print ("input file : %s" % inputFile)
-print ("score file : %s" % scoreFile)
-print ("open gap penalty : %s" % openGap)
-print ("extension gap penalty : %s" % extGap)
-### Run Smith-Waterman Algorithm
-runSW(args.input, args.score, args.opengap, args.extgap)
+    ### Read input file and score file.
+    parser = argparse.ArgumentParser(description='Smith-Waterman Algorithm')
+    parser.add_argument('-i', '--input', help='input file', required=True)
+    parser.add_argument('-s', '--score', help='score file', required=True)
+    parser.add_argument('-o', '--opengap', help='open gap', required=False, default=-2)
+    parser.add_argument('-e', '--extgap', help='extension gap', required=False, default=-1)
+    args = parser.parse_args()
+
+    inputFile = args.input
+    scoreFile = args.score
+    openGap = args.opengap
+    extGap = args.extgap
+
+    ### Print input and score file names.
+    print ("input file : %s" % inputFile)
+    print ("score file : %s" % scoreFile)
+    print ("open gap penalty : %s" % openGap)
+    print ("extension gap penalty : %s" % extGap)
+
+    ### Run Smith-Waterman Algorithm
+    runSW(args.input, args.score, args.opengap, args.extgap)
