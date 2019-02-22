@@ -133,8 +133,8 @@ def main():
 
     inputFile = args.input
     scoreFile = args.score
-    openGap = args.opengap
-    extGap = args.extgap
+    openGap = float(args.opengap)
+    extGap = float(args.extgap)
 
     ### Print input and score file names.
     print ("input file : %s" % inputFile)
