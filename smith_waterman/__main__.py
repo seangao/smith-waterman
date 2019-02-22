@@ -143,7 +143,7 @@ def main():
     print ("extension gap penalty : %s" % extGap)
 
     ### Run Smith-Waterman Algorithm
-    runSW(args.input, args.score, args.opengap, args.extgap)
+    runSW(inputFile, scoreFile, openGap, extGap)
 
 if __name__ == '__main__':
     main()
